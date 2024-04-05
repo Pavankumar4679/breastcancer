@@ -75,6 +75,10 @@ def sign(request: Request):
     return templates.TemplateResponse("signup.html", {"request": request})
 
 
+@app.get('/about')
+def sign(request: Request):
+    return templates.TemplateResponse("about.html", {"request": request})
+
 
 
 

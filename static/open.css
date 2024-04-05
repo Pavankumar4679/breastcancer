@@ -39,7 +39,7 @@
 }
 
 .banner-section-bg-container {
-    background-image: url('./static/homebg.jpg');
+    background: url('./static/homebg.jpg');
     height: 100vh;
     max-width: 100%;
     text-align: center;
