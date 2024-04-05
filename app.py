@@ -14,6 +14,7 @@ import pandas as pd
 import numpy as np
 import io
 import os
+import torch
 from collections import Counter
 from google.cloud import bigquery, storage
 from google.oauth2 import service_account
@@ -21,7 +22,8 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.resnet50 import preprocess_input
 import psycopg2
 from fastapi.responses import RedirectResponse
-
+import torchvision
+from torchvision import transforms
 
 
 
@@ -88,7 +90,7 @@ async def signup(
 ):
    
     cur = conn.cursor()
-    cur.execute("INSERT INTO drsignup (uname,email,password1,password2) VALUES (%s, %s,%s, %s)", (username,email,password1,password2))
+    cur.execute("INSERT INTO cancertb (uname,email,password1,password2) VALUES (%s, %s,%s, %s)", (username,email,password1,password2))
     conn.commit()
     cur.close() 
  
@@ -102,7 +104,7 @@ async def do_login(
     password: str = Form(...),
 ):
     cur = conn.cursor()
-    cur.execute("SELECT * FROM drsignup WHERE uname=%s and password1=%s", (username,password))
+    cur.execute("SELECT * FROM cancertb WHERE uname=%s and password1=%s", (username,password))
     existing_user = cur.fetchone()
     cur.close()
     
@@ -120,74 +122,53 @@ async def do_login(
 
 @app.post("/upload_image")
 async def upload_image(request: Request, image_file: UploadFile = File(...)):
-    
-  
+    # Save the uploaded image to the specified folder
     save_path = os.path.join(UPLOAD_FOLDER, image_file.filename)
-
     with open(save_path, "wb") as f:
         content = await image_file.read()
         f.write(content)
 
-
-    bucket_name = "sandeep_personal"
-    models = ["LNN_Model.pb"]
-     
-    key_path = "ck-eams-9260619158c0.json"
-    client = storage.Client.from_service_account_json(key_path)
-
-    # Retrieve the bucket
-    bucket = client.get_bucket(bucket_name)
-
-    all_predicted_class_labels = []
-
-    for model_file in models:
+    # Load the PyTorch model
+    try:
+        model_file = "Resnet_fineTuning.pth"
+        bucket_name = "sandeep_personal"
+        key_path = "ck-eams-9260619158c0.json"
+        client = storage.Client.from_service_account_json(key_path)
+        bucket = client.get_bucket(bucket_name)
         blob = bucket.blob(model_file)
         blob.download_to_filename(model_file)
+        model = torch.load(model_file, map_location=torch.device('cpu'))  # Load model on CPU
+    except Exception as e:
+        return {"error": str(e)}
 
-        model = keras.models.load_model(model_file)
-        
-         
-        img = image.load_img(save_path, target_size=(224, 224))  # Change image_path to save_path
-        img_array = image.img_to_array(img)
-        img_array = np.expand_dims(img_array, axis=0)
-        img_array = preprocess_input(img_array)
+    # Define class names for predictions
+    class_names = ['benign', 'malignant', 'normal']  # Replace with your actual class names
 
-        # Make predictions
-        predictions = model.predict(img_array)
+    # Perform inference on the uploaded image
+    try:
+        image = Image.open(io.BytesIO(content))
+        preprocess = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ])
+        input_tensor = preprocess(image)
+        input_batch = input_tensor.unsqueeze(0)
 
-        # Decode the predictions
-        class_labels = {0: 'No_Dr', 1: 'Mild', 2: 'Moderate', 3: 'Severe', 4: 'Proliferate_Dr'}
-        predicted_class_index = np.argmax(predictions)
-        predicted_class_label = class_labels[predicted_class_index]
-        confidence = predictions[0][predicted_class_index]
+        with torch.no_grad():
+            model.eval()
+            output = model(input_batch)
 
-        print("Predicted class:", predicted_class_label)
+        _, predicted = torch.max(output, 1)
+        predicted_class = class_names[predicted.item()]
+    except Exception as e:
+        return {"error": str(e)}
 
-        all_predicted_class_labels.append(predicted_class_label)
- 
-        os.remove(model_file)
-    
-    all_predicted_class_labels = np.array(all_predicted_class_labels)
-
-    print("All predicted class labels:", all_predicted_class_labels)
-    
-    label_counts = Counter(all_predicted_class_labels)
-    most_common_label = label_counts.most_common(1)[0][0]
-
-    print(most_common_label)
-
-    most_common_index = None
-    for index, label in class_labels.items():
-        if label == most_common_label:
-            most_common_index = index
-            break
-
+    # Prepare response data
     context = {
         "request": request,
-        "predicted_class_label":most_common_label,
-        "most_common_index":most_common_index
+        "predicted_class": predicted_class
     }
 
-
-    return templates.TemplateResponse("result.html",context)
-
+    # Render an HTML template with the prediction result
+    return templates.TemplateResponse("result.html", context)

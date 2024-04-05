@@ -30,7 +30,7 @@ body {
     background-position: center;
     background-repeat: no-repeat;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	min-height:80%;
 	align-items: center;
 	justify-content: space-evenly;
