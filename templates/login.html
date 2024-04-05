@@ -16,7 +16,7 @@
     box-sizing: border-box;
 }
 body{
-    background-image: url('https://images.unsplash.com/photo-1528460033278-a6ba57020470?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-image: url('https://images.unsplash.com/photo-1635776063328-153b13e3c245?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -54,7 +54,7 @@ body{
 form{
     height: 520px;
     width: 400px;
-    background-color: rgba(255,255,255,0.7);
+    background-color: rgba(212, 199, 244, 0.8);
     position: absolute;
     transform: translate(-50%,-50%);
     top: 50%;
@@ -72,7 +72,7 @@ form *{
     border: none;
 }
 form h3{
-    font-size: 32px;
+    font-size: 34px;
     font-weight: 500;
     line-height: 42px;
     text-align: center;
@@ -88,7 +88,7 @@ input{
     display: block;
     height: 50px;
     width: 100%;
-    background-color: rgba(255,255,255,0.07);
+    background-color: rgba(190, 184, 184, 0.07);
     border-radius: 3px;
     padding: 0 10px;
     border: 1px solid black;
@@ -100,7 +100,7 @@ input{
 button{
     margin-top: 50px;
     width: 100%;
-    background-color: #81b2ea;
+    background-color: #700dc6;
     color: white;
     padding: 15px 0;
     font-size: 18px;
@@ -154,16 +154,16 @@ button{
     <form action="" method="post">
         <h3>Login Here</h3>
        
-        <label for="username">Username</label>
+        <label for="username" style="font-size: 20px;">Username</label>
         <input type="text" placeholder="Enter Username" id="username" name="username">
 
-        <label for="password">Password</label>
+        <label for="password" style="font-size: 20px;">Password</label>
          <input type="password" placeholder="Password" id="password" name="password">
 
 
-        <button class="custom-button" type="submit">Log In</button>
+        <button class="custom-button" type="submit" style="margin-bottom: 2vh;">Log In</button>
        
-        <a href="/sign" >Create a account</a>
+        <a href="/sign" style="color: black;" >Create a account</a>
     </form>
 </body>
 </html>

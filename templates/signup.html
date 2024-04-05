@@ -17,7 +17,7 @@
     box-sizing: border-box;
 }
 body{
-    background-image: url('https://images.unsplash.com/photo-1528460033278-a6ba57020470?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-image: url('https://images.unsplash.com/photo-1635776063328-153b13e3c245?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -53,12 +53,13 @@ body{
     bottom: -80px;
 }
 form{
-    height: 84vh;
+    height: 88vh;
     width: 450px;
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(212, 199, 244, 0.8);
     position: absolute;
     transform: translate(-50%,-50%);
     top: 50%;
+    color: rgba(35, 33, 33, 0.964);
     left: 50%;
     border-radius: 10px;
     backdrop-filter: blur(10px);
@@ -73,7 +74,7 @@ form *{
     border: none;
 }
 form h3{
-    font-size: 32px;
+    font-size: 34px;
     font-weight: 500;
     line-height: 42px;
     text-align: center;
@@ -89,7 +90,7 @@ input{
     display: block;
     height: 40px;
     width: 100%;
-    background-color: rgba(255,255,255,0.07);
+    background-color: rgba(190, 184, 184, 0.07);
     border: 1px solid black;
     border-radius: 3px;
     padding: 0 10px;
@@ -99,11 +100,11 @@ input{
 }
 button{
     margin-top: 50px;
-    width: 100%;
-    background-color: #81b2ea;
+    width: 80%;
+    background-color: #700dc6;
     color: white;
     padding: 15px 0;
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 600;
     border-radius: 5px;
     cursor: pointer;
@@ -140,22 +141,22 @@ button{
         
         <h3>Sign Up Here</h3>
 
-        <label for="username">Username</label>
+        <label for="username" style="font-size: 20px;">Username</label>
         <input type="text" placeholder="Username" name="username" id="username">
 
-        <label for="email">Email</label>
+        <label for="email" style="font-size: 20px;">Email</label>
         <input type="email" placeholder="Email or Phone" name="email" id="email">
    
        
-        <label for="password1">Password</label>
+        <label for="password1" style="font-size: 20px;">Password</label>
         <input type="password" placeholder="Password" id="password1" name="password1">
           
-        <label for="password2">Confirm Password</label>
+        <label for="password2" style="font-size: 20px;">Confirm Password</label>
         <input type="password" placeholder="Confirm Password" id="password2" name="password2">
 
-
+         <div style="text-align: center;">  
         <button type="submit">Register</button>
-        
+    </div>
 
     </form>
 </body>

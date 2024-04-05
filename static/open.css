@@ -39,7 +39,7 @@
 }
 
 .banner-section-bg-container {
-    background: url('./static/homebg.jpg');
+    
     height: 100vh;
     max-width: 100%;
     text-align: center;
@@ -95,19 +95,21 @@
 .healthy-food-section-img {
     width: 280px;
     height: 350px;
+    margin-bottom: 2vh;
 }
 
 .healthy-food-section-heading {
     color: #183b56;
     font-family: "Roboto";
-    font-size: 32px;
+    font-size: 40px;
     font-weight: 700;
+    margin-bottom: 2vh;
 }
 
 .healthy-food-section-description {
     color: #5a7184;
     font-family: "Roboto";
-    font-size: 20px;
+    font-size: 24px;
 }
 
 .custom-button {
