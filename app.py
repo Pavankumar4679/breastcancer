@@ -167,7 +167,8 @@ async def upload_image(request: Request, image_file: UploadFile = File(...)):
     # Prepare response data
     context = {
         "request": request,
-        "predicted_class": predicted_class
+        "predicted_class": predicted_class,
+        "path":save_path
     }
 
     # Render an HTML template with the prediction result
