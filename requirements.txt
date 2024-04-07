@@ -9,8 +9,6 @@ pandas
 Jinja2==3.0.3
 python-multipart
 numpy
-Pillow
-torch
 matplotlib
 tensorflow
 torchvision

@@ -1,0 +1,4 @@
+medmnist
+ncps
+Pillow
+torch
