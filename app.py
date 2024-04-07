@@ -190,12 +190,23 @@ async def do_login(
 
 
 @app.post("/upload_image")
-async def upload_image(request: Request, image_file: UploadFile = File(...)):
+async def upload_image(request: Request, image_file: UploadFile = File(...),username: str = Form(...), age: int = Form(...), date: str = Form(...)):
     # Save the uploaded image to the specified folder
     image_path = os.path.join(UPLOAD_FOLDER, image_file.filename)
     with open(image_path, "wb") as f:
         content = await image_file.read()
         f.write(content)
+
+    image_contents = await image_file.read()
+     
+    insert_sql = """
+    INSERT INTO cancer_result (username, age, date_of_upload, image)
+    VALUES (%s, %s, %s, %s);
+    """    
+    
+    with conn.cursor() as cursor:
+        cursor.execute(insert_sql, (username, age, date, psycopg2.Binary(image_contents)))
+    conn.commit()
 
     # Load the PyTorch model
     try:
