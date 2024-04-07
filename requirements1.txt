@@ -2,3 +2,4 @@ medmnist
 ncps
 Pillow
 torch
+seaborn
