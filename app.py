@@ -199,14 +199,9 @@ async def upload_image(request: Request, image_file: UploadFile = File(...),user
 
     image_contents = await image_file.read()
      
-    insert_sql = """
-    INSERT INTO cancer_result (username, age, date_of_upload, image)
-    VALUES (%s, %s, %s, %s);
-    """    
     
-    with conn.cursor() as cursor:
-        cursor.execute(insert_sql, (username, age, date, psycopg2.Binary(image_contents)))
-    conn.commit()
+    
+    
 
     # Load the PyTorch model
     try:
@@ -260,6 +255,14 @@ async def upload_image(request: Request, image_file: UploadFile = File(...),user
     else:
         predicted_class=predicted_class+"The image does not depicts cancer."
 
+    insert_sql = """
+    INSERT INTO cancer_result (username, age, date_of_upload, image,predicted_class)
+    VALUES (%s, %s, %s, %s,%s);
+    """    
+
+    with conn.cursor() as cursor:
+        cursor.execute(insert_sql, (username, age, date, psycopg2.Binary(image_contents),predicted_class))
+    conn.commit()
 
     # Prepare response data
     context = {
