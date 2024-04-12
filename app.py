@@ -251,9 +251,9 @@ async def upload_image(request: Request, image_file: UploadFile = File(...),user
     # 4. Interpret the Prediction
     predicted_class=""
     if prediction == 0:
-        predicted_class=predicted_class+"The image depicts the cancer."
+        predicted_class=predicted_class+"The image "+image_file.filename+" depicts the cancer."
     else:
-        predicted_class=predicted_class+"The image does not depicts cancer."
+        predicted_class=predicted_class+"The image "+image_file.filename+" does not depicts cancer."
 
     insert_sql = """
     INSERT INTO cancer_result (username, age, date_of_upload, image,predicted_class)
@@ -263,12 +263,12 @@ async def upload_image(request: Request, image_file: UploadFile = File(...),user
     with conn.cursor() as cursor:
         cursor.execute(insert_sql, (username, age, date, psycopg2.Binary(image_contents),predicted_class))
     conn.commit()
-
+    
     # Prepare response data
     context = {
         "request": request,
         "predicted_class": predicted_class,
-        "path":image_path
+        "path":image_path,
     }
 
     # Render an HTML template with the prediction result
